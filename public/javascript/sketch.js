@@ -19,6 +19,9 @@ let olddy;
 let dx = 0;
 let dy = 0;
 
+//keep track of right mouse button
+let rmb_down = false;
+
 //dont allow drawing if modal is open
 let modalOpen = false;
 
@@ -100,7 +103,7 @@ function draw() {
         dx = mouseX - oldMouseX;
         dy = mouseY - oldMouseY;
     
-        if(mouseIsPressed) {
+        if(mouseIsPressed && !rmb_down) {
     
             //check to see if you draw with color or erase (aka draw with background color)
             if (eraser){
@@ -147,7 +150,7 @@ function draw() {
                 //finally, since we know you have the pencil tool equipped, set the color of the line to the chosen color
                 stroke(r, g, b);
             }
-    
+            console.log("draw");
             //draw a line and set the return to true
             line(mouseX, mouseY, pmouseX, pmouseY)
             rtn = true;
@@ -271,7 +274,6 @@ function record(){
             //make a new entry into the 3D array
             strokes[numberStrokes][0][numPoints] = mouseX;
             strokes[numberStrokes][1][numPoints] = mouseY;
-
             numPoints++;
         }
     }
@@ -288,8 +290,8 @@ function getColors(){
 
 /**
  * draws an "average line" by connecting the points in the color that the stroke was originally drawn in
- * @param {*} strokes 
- * @param {*} colors 
+ * @param {Array} strokes 3D array of strokes for drawing
+ * @param {Array} colors array of colors used in each stroke in order (if null, assume just black)
  */
 function drawAvg(strokes, colors){
     //draws the averages of each stroke on the canvas by looping through the 3D array and connecting a straight line between every point
@@ -319,3 +321,14 @@ function drawAvg(strokes, colors){
         }
     }
 }
+
+/**
+ * setter for rmb_down (RMB = right mouse button)
+ * @param {Boolean} bool true if rmb is pressed, false otherwise
+ */
+function setRMB(bool){
+    //check to make sure it is a boolean
+    if (bool === true || bool === false){
+      rmb_down = bool;
+    }
+  }
